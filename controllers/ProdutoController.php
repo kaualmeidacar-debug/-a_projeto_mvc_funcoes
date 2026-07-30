@@ -1,28 +1,30 @@
 <?php
-// A resposta sera enviada em formt JSON
+
+//A resposta será enviada em formato JSON
 header("Content-Type: application/json; charset=utf-8");
 
-// Verfica se a requisição do tipo POST
-if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    http_response_code(405); //Metodo não permitido
+//Verifica se a requisição é do tipo POST
+    if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    http_response_code(405); //405 - método não permitido
 
     echo json_encode([
         "sucesso" => false,
-        "mensagem" => "Metodo não permitido, esperava GET"
+        "mensagem" => "Método não permitido, esperava GET"
     ]);
 
     exit;
 }
-// Recebe os dadso
+
+// Recebe os dados enviados pelo formulário
 $nome = trim($_POST['nome']);
 $categoria = trim($_POST['categoria']);
 $preco = trim($_POST['preco']);
 $quantidade = trim($_POST['quantidade']);
 
-// Valida os campos obrigatorios
-
+// Valida os campos obrigatórios 
 if ($nome === "" || $categoria === "" || $preco === "" || $quantidade === "") {
     http_response_code(400);
+
     echo json_encode([
         "sucesso" => false,
         "mensagem" => "Preencha todos os campos"
@@ -31,17 +33,18 @@ if ($nome === "" || $categoria === "" || $preco === "" || $quantidade === "") {
     exit;
 }
 
-// Retornar sucesso 
+// -------->>> TODO: Aqui seria o banco de dados 
+
+//Retornar sucesso 
 http_response_code(200);
 
-echo json_encode([
+echo json_encode ([
     "sucesso" => true,
-    "mensagem" => "Produto cadastrados com sucesso!",
+    "mensagem" => "Produto cadastrado com sucesso!",
     "produto" => [
         "nome" => $nome,
         "categoria" => $categoria,
         "preco" => $preco,
         "quantidade" => $quantidade,
     ]
-])
-?>
+]);
