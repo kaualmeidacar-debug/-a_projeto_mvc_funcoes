@@ -1,6 +1,6 @@
 <?php
 //definir url do  projeto
-//http://localhost/projetos-michelle/mvc/a_projeto_mvc_funcoes/index.php?page=produtos
+//http://localhost/projetos-kaua/mvc/-a_projeto_mvc_funcoes/index.php?page=produtos
 
 //definir páginas válidas no projeto
 $paginasValidas = [
