@@ -30,6 +30,5 @@ form.addEventListener("submit", async function (evento) {
         mensagem.textContent = "Erro ao enviar os dados";
 
         console.log(erro);
-
     }
 })
