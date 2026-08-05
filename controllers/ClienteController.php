@@ -17,12 +17,12 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 
 // Recebe os dados enviados pelo formulário
 $nome = trim($_POST['nome']);
-$regFunc = trim($_POST['regFunc']);
-$pis = trim($_POST['pis']);
-$cnpj = trim($_POST['cnpj']);
+$cpf = trim($_POST['cpf']);
+$email = trim($_POST['email']);
+$telefone = trim($_POST['telefone']);
 
 // Valida os campos obrigatórios 
-if ($nome === "" || $regFunc === "" || $pis === "" || $cnpj === "") {
+if ($nome === "" || $cpf === "" || $email === "" || $telefone === "") {
     http_response_code(400);
 
     echo json_encode([
@@ -35,16 +35,16 @@ if ($nome === "" || $regFunc === "" || $pis === "" || $cnpj === "") {
 
 // -------->>> TODO: Aqui seria o banco de dados 
 
-//Retornar sucesso 
+//Simulando  retornar  sucesso 
 http_response_code(200);
 
 echo json_encode([
     "sucesso" => true,
-    "mensagem" => "Funcionario cadastrado com sucesso!",
-    "funcionario" => [
+    "mensagem" => "Cliente cadastrado com sucesso!",
+    "cliente" => [
         "nome" => $nome,
-        "regFunc" => $regFunc,
-        "pis" => $pis,
-        "cnpj" => $cnpj
+        "cpf" => $cpf,
+        "email" => $email,
+        "telefone" => $telefone,
     ]
 ]);
