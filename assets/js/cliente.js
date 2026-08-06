@@ -1,0 +1,167 @@
+// PROJETO USANDO JQUERY
+$(document).ready(function () {
+    // Aplica as máscaras nos campos
+    aplicarMascaras();
+  
+    // Configura a validação e o envio
+    validarFormulario();
+  });
+  
+  function aplicarMascaras() {
+    // Telefone no formato:(00) 00000-0000
+    $("#telefone").mask("(00) 00000-0000");
+    $("#cpf").mask("000.000.000-00");
+  }
+  
+  function validarFormulario() {
+    // Seleciona a div responsável pelas mensagens
+    const mensagem = document.getElementById("mensagem");
+  
+    // Impede o formulário de recarregar a página
+    $("#formCliente").on("submit", function (evento) {
+      evento.preventDefault();
+    });
+  
+    // Configura o jQuery Validation
+    $("#formCliente").validate({
+      // Regras de validação
+      rules: {
+        nome: {
+          required: true,
+          minlength: 3,
+          maxlength: 100,
+        },
+  
+        cpf: {
+          required: true,
+          minlength: 14,
+          maxlength: 14,
+        },
+  
+        email: {
+          required: true,
+          email: true,
+        },
+  
+        telefone: {
+          required: true,
+          minlength: 15,
+          maxlength: 15,
+        },
+      },
+  
+      // Mensagens em português
+      messages: {
+        nome: {
+          required: "Informe o nome do cliente.",
+          minlength: "O nome deve ter pelo menos 3 caracteres.",
+          maxlength: "O nome deve ter no máximo 100 caracteres.",
+        },
+  
+        cpf: {
+          required: "Informe o CPF do cliente.",
+          minlength: "O CNPJ deve ter 14 caracteres.",
+          maxlength: "O CNPJ deve ter 14 caracteres.",
+        },
+  
+        email: {
+          required: "Informe o email do cliente.",
+          email: "E-mail nesse formato: email@email.com",
+        },
+  
+        telefone: {
+          required: "Informe o telefone do cliente.",
+          minlength: "O telefone deve ter 15 caracteres.",
+          maxlength: "O telefone deve ter 15 caracteres.",
+        },
+      },
+  
+      // Mensagens de erro
+      errorPlacement: function (error, element) {
+        element
+          .closest(".input-group")
+          .find(".invalid-feedback")
+          .text(error.text());
+      },
+  
+      // Executado quando o campo está inválido
+      highlight: function (element) {
+        $(element).removeClass("is-valid").addClass("is-invalid");
+      },
+  
+      // Executado quando o campo está válido
+      unhighlight: function (element) {
+        $(element).removeClass("is-invalid").addClass("is-valid");
+      },
+  
+      // Executado somente quando todos os campos forem válidos
+      submitHandler: async function (formulario) {
+        // Captura os dados do formulário
+        const dados = new FormData(formulario);
+  
+        // Remove a máscara do cpf
+        const cpf = $("#cpf").val().replace(/\D/g, "");
+  
+        // Remove a máscara do telefone
+        const telefone = $("#telefone").val().replace(/\D/g, "");
+  
+        // Atualiza os valores no FormData
+        dados.set("cpf", cpf);
+        dados.set("telefone", telefone);
+  
+        // Mostra os dados no console
+        // console.table(
+        //     Object.fromEntries(dados.entries())
+        // );
+  
+        // Exibe mensagem enquanto envia
+        mensagem.className = "alert alert-info mt-3";
+        mensagem.textContent = "Enviando dados...";
+  
+        try {
+          // Envia os dados para o Controller
+          const resposta = await fetch("controllers/ClienteController.php", {
+            method: "POST",
+            body: dados,
+          });
+  
+          // Converte a resposta JSON
+          const resultado = await resposta.json();
+  
+          // console.log(resultado);
+  
+          // Verifica se ocorreu erro HTTP
+          if (!resposta.ok) {
+            mensagem.className = "alert alert-danger mt-3";
+  
+            mensagem.textContent =
+              resultado.mensagem ?? "Erro ao cadastrar cliente.";
+  
+            return;
+          }
+  
+          // Exibe mensagem de sucesso
+          mensagem.className = "alert alert-success mt-3";
+          mensagem.textContent = resultado.mensagem;
+  
+          // Limpa os campos
+          formulario.reset();
+  
+          // Remove as classes da validação
+          $(formulario).find(".form-control").removeClass("is-valid is-invalid");
+        } catch (erro) {
+          mensagem.className = "alert alert-danger mt-3";
+          mensagem.textContent =
+            "Erro ao enviar os dados para o controller de cliente.";
+  
+          console.error(erro);
+        }
+      },
+    });
+  
+    // Quando o formulário for limpo
+    $("#formCliente").on("reset", function () {
+      // Remove as classes de validação
+      $(this).find(".form-control").removeClass("is-valid is-invalid");
+    });
+  }

@@ -100,7 +100,6 @@ $(document).ready(function () {
   
         /*
          * Converte o preço:
-         *
          * Formato exibido: 1.234,56
          * Formato enviado: 1234.56
          */
@@ -113,9 +112,7 @@ $(document).ready(function () {
         dados.set("preco", precoConvertido);
   
         // Mostra os dados no console
-        // console.table(
-        //     Object.fromEntries(dados.entries())
-        // );
+        // console.table(Object.fromEntries(dados.entries()));
   
         // Exibe mensagem enquanto envia
         mensagem.className = "alert alert-info mt-3";
